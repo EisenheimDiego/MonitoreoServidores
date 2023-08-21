@@ -1,0 +1,920 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MonitoreoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Componente">
+          <Key>
+            <PropertyRef Name="CodigoC" />
+          </Key>
+          <Property Name="CodigoC" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EncargadoServicio">
+          <Key>
+            <PropertyRef Name="Usuario" />
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodigoServicio" Type="int" Nullable="false" />
+          <Property Name="Notificaciones" Type="bit" />
+        </EntityType>
+        <EntityType Name="EncargadoServidor">
+          <Key>
+            <PropertyRef Name="Usuario" />
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="Notificaciones" Type="bit" />
+        </EntityType>
+        <EntityType Name="MonitoreoServicio">
+          <Key>
+            <PropertyRef Name="MonitoreoID" />
+          </Key>
+          <Property Name="MonitoreoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="CodigoServicio" Type="int" Nullable="false" />
+          <Property Name="Timeout" Type="float" Nullable="false" />
+          <Property Name="Disponibilidad" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MonitoreoServidor">
+          <Key>
+            <PropertyRef Name="MonitoreoID" />
+          </Key>
+          <Property Name="MonitoreoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="CPU" Type="float" Nullable="false" />
+          <Property Name="Memoria" Type="float" Nullable="false" />
+          <Property Name="Disco" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Parametro">
+          <Key>
+            <PropertyRef Name="CodigoP" />
+          </Key>
+          <Property Name="CodigoP" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ParametroServicio">
+          <Key>
+            <PropertyRef Name="CodigoP" />
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="CodigoP" Type="int" Nullable="false" />
+          <Property Name="CodigoServicio" Type="int" Nullable="false" />
+          <Property Name="Valor" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="CodigoServicio" Type="int" Nullable="false" />
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="255" />
+          <Property Name="Timeout" Type="float" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Servidor">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="255" />
+          <Property Name="UsuarioAdmin" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Contrasena" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Umbral">
+          <Key>
+            <PropertyRef Name="CodigoUmbral" />
+          </Key>
+          <Property Name="CodigoUmbral" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UmbralComponente">
+          <Key>
+            <PropertyRef Name="Codigo" />
+            <PropertyRef Name="CodigoC" />
+            <PropertyRef Name="CodigoUmbral" />
+          </Key>
+          <Property Name="Codigo" Type="int" Nullable="false" />
+          <Property Name="CodigoC" Type="int" Nullable="false" />
+          <Property Name="CodigoUmbral" Type="int" Nullable="false" />
+          <Property Name="Porcentaje" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="Usuario" />
+          </Key>
+          <Property Name="Usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Correo" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Contrasena" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Encargado__Codig__4D94879B">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="EncargadoServicio" Type="Self.EncargadoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="EncargadoServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Codig__4F7CD00D">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="EncargadoServidor" Type="Self.EncargadoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="EncargadoServidor">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Usuar__4E88ABD4">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="EncargadoServicio" Type="Self.EncargadoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario" />
+            </Principal>
+            <Dependent Role="EncargadoServicio">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Usuar__5070F446">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="EncargadoServidor" Type="Self.EncargadoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario" />
+            </Principal>
+            <Dependent Role="EncargadoServidor">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Monitoreo__Codig__5165187F">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="MonitoreoServicio" Type="Self.MonitoreoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="MonitoreoServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Monitoreo__Codig__52593CB8">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="MonitoreoServidor" Type="Self.MonitoreoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="MonitoreoServidor">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Parametro__Codig__534D60F1">
+          <End Role="Parametro" Type="Self.Parametro" Multiplicity="1" />
+          <End Role="ParametroServicio" Type="Self.ParametroServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parametro">
+              <PropertyRef Name="CodigoP" />
+            </Principal>
+            <Dependent Role="ParametroServicio">
+              <PropertyRef Name="CodigoP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Parametro__Codig__5441852A">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="ParametroServicio" Type="Self.ParametroServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="ParametroServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Servicio__Codigo__5535A963">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UmbralCom__Codig__5629CD9C">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UmbralCom__Codig__571DF1D5">
+          <End Role="Componente" Type="Self.Componente" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Componente">
+              <PropertyRef Name="CodigoC" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="CodigoC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UmbralCom__Codig__5812160E">
+          <End Role="Umbral" Type="Self.Umbral" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Umbral">
+              <PropertyRef Name="CodigoUmbral" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="CodigoUmbral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Dashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Servidor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InicioSesion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usuario" Type="varchar" Mode="In" />
+          <Parameter Name="contrasena" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Notificaciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tipo" Type="int" Mode="In" />
+          <Parameter Name="usuario" Type="varchar" Mode="In" />
+          <Parameter Name="codigo" Type="int" Mode="In" />
+          <Parameter Name="valor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ServicioServidor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="servidor" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ServidorNombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Correos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dstask18">
+          <Parameter Name="valor" Type="int" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="MonitoreoModelStoreContainer">
+          <EntitySet Name="Componente" EntityType="Self.Componente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EncargadoServicio" EntityType="Self.EncargadoServicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EncargadoServidor" EntityType="Self.EncargadoServidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonitoreoServicio" EntityType="Self.MonitoreoServicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonitoreoServidor" EntityType="Self.MonitoreoServidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parametro" EntityType="Self.Parametro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ParametroServicio" EntityType="Self.ParametroServicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicio" EntityType="Self.Servicio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servidor" EntityType="Self.Servidor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Umbral" EntityType="Self.Umbral" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UmbralComponente" EntityType="Self.UmbralComponente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Encargado__Codig__4D94879B" Association="Self.FK__Encargado__Codig__4D94879B">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="EncargadoServicio" EntitySet="EncargadoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Codig__4F7CD00D" Association="Self.FK__Encargado__Codig__4F7CD00D">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="EncargadoServidor" EntitySet="EncargadoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Usuar__4E88ABD4" Association="Self.FK__Encargado__Usuar__4E88ABD4">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="EncargadoServicio" EntitySet="EncargadoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Usuar__5070F446" Association="Self.FK__Encargado__Usuar__5070F446">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="EncargadoServidor" EntitySet="EncargadoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Monitoreo__Codig__5165187F" Association="Self.FK__Monitoreo__Codig__5165187F">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="MonitoreoServicio" EntitySet="MonitoreoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Monitoreo__Codig__52593CB8" Association="Self.FK__Monitoreo__Codig__52593CB8">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="MonitoreoServidor" EntitySet="MonitoreoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Parametro__Codig__534D60F1" Association="Self.FK__Parametro__Codig__534D60F1">
+            <End Role="Parametro" EntitySet="Parametro" />
+            <End Role="ParametroServicio" EntitySet="ParametroServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Parametro__Codig__5441852A" Association="Self.FK__Parametro__Codig__5441852A">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="ParametroServicio" EntitySet="ParametroServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Servicio__Codigo__5535A963" Association="Self.FK__Servicio__Codigo__5535A963">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UmbralCom__Codig__5629CD9C" Association="Self.FK__UmbralCom__Codig__5629CD9C">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UmbralCom__Codig__571DF1D5" Association="Self.FK__UmbralCom__Codig__571DF1D5">
+            <End Role="Componente" EntitySet="Componente" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UmbralCom__Codig__5812160E" Association="Self.FK__UmbralCom__Codig__5812160E">
+            <End Role="Umbral" EntitySet="Umbral" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MonitoreoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Componente">
+          <Key>
+            <PropertyRef Name="CodigoC" />
+          </Key>
+          <Property Name="CodigoC" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UmbralComponente" Relationship="Self.FK__UmbralCom__Codig__571DF1D5" FromRole="Componente" ToRole="UmbralComponente" />
+        </EntityType>
+        <EntityType Name="EncargadoServicio">
+          <Key>
+            <PropertyRef Name="Usuario" />
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CodigoServicio" Type="Int32" Nullable="false" />
+          <Property Name="Notificaciones" Type="Boolean" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK__Encargado__Codig__4D94879B" FromRole="EncargadoServicio" ToRole="Servicio" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Encargado__Usuar__4E88ABD4" FromRole="EncargadoServicio" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="EncargadoServidor">
+          <Key>
+            <PropertyRef Name="Usuario" />
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="Notificaciones" Type="Boolean" />
+          <NavigationProperty Name="Servidor" Relationship="Self.FK__Encargado__Codig__4F7CD00D" FromRole="EncargadoServidor" ToRole="Servidor" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Encargado__Usuar__5070F446" FromRole="EncargadoServidor" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="MonitoreoServicio">
+          <Key>
+            <PropertyRef Name="MonitoreoID" />
+          </Key>
+          <Property Name="MonitoreoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CodigoServicio" Type="Int32" Nullable="false" />
+          <Property Name="Timeout" Type="Double" Nullable="false" />
+          <Property Name="Disponibilidad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK__Monitoreo__Codig__5165187F" FromRole="MonitoreoServicio" ToRole="Servicio" />
+        </EntityType>
+        <EntityType Name="MonitoreoServidor">
+          <Key>
+            <PropertyRef Name="MonitoreoID" />
+          </Key>
+          <Property Name="MonitoreoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="CPU" Type="Double" Nullable="false" />
+          <Property Name="Memoria" Type="Double" Nullable="false" />
+          <Property Name="Disco" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Servidor" Relationship="Self.FK__Monitoreo__Codig__52593CB8" FromRole="MonitoreoServidor" ToRole="Servidor" />
+        </EntityType>
+        <EntityType Name="Parametro">
+          <Key>
+            <PropertyRef Name="CodigoP" />
+          </Key>
+          <Property Name="CodigoP" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ParametroServicio" Relationship="Self.FK__Parametro__Codig__534D60F1" FromRole="Parametro" ToRole="ParametroServicio" />
+        </EntityType>
+        <EntityType Name="ParametroServicio">
+          <Key>
+            <PropertyRef Name="CodigoP" />
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="CodigoP" Type="Int32" Nullable="false" />
+          <Property Name="CodigoServicio" Type="Int32" Nullable="false" />
+          <Property Name="Valor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Parametro" Relationship="Self.FK__Parametro__Codig__534D60F1" FromRole="ParametroServicio" ToRole="Parametro" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK__Parametro__Codig__5441852A" FromRole="ParametroServicio" ToRole="Servicio" />
+        </EntityType>
+        <EntityType Name="Servicio">
+          <Key>
+            <PropertyRef Name="CodigoServicio" />
+          </Key>
+          <Property Name="CodigoServicio" Type="Int32" Nullable="false" />
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Timeout" Type="Double" Nullable="false" />
+          <Property Name="Tipo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="EncargadoServicio" Relationship="Self.FK__Encargado__Codig__4D94879B" FromRole="Servicio" ToRole="EncargadoServicio" />
+          <NavigationProperty Name="MonitoreoServicio" Relationship="Self.FK__Monitoreo__Codig__5165187F" FromRole="Servicio" ToRole="MonitoreoServicio" />
+          <NavigationProperty Name="ParametroServicio" Relationship="Self.FK__Parametro__Codig__5441852A" FromRole="Servicio" ToRole="ParametroServicio" />
+          <NavigationProperty Name="Servidor" Relationship="Self.FK__Servicio__Codigo__5535A963" FromRole="Servicio" ToRole="Servidor" />
+        </EntityType>
+        <EntityType Name="Servidor">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UsuarioAdmin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contrasena" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="EncargadoServidor" Relationship="Self.FK__Encargado__Codig__4F7CD00D" FromRole="Servidor" ToRole="EncargadoServidor" />
+          <NavigationProperty Name="MonitoreoServidor" Relationship="Self.FK__Monitoreo__Codig__52593CB8" FromRole="Servidor" ToRole="MonitoreoServidor" />
+          <NavigationProperty Name="Servicio" Relationship="Self.FK__Servicio__Codigo__5535A963" FromRole="Servidor" ToRole="Servicio" />
+          <NavigationProperty Name="UmbralComponente" Relationship="Self.FK__UmbralCom__Codig__5629CD9C" FromRole="Servidor" ToRole="UmbralComponente" />
+        </EntityType>
+        <EntityType Name="Umbral">
+          <Key>
+            <PropertyRef Name="CodigoUmbral" />
+          </Key>
+          <Property Name="CodigoUmbral" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UmbralComponente" Relationship="Self.FK__UmbralCom__Codig__5812160E" FromRole="Umbral" ToRole="UmbralComponente" />
+        </EntityType>
+        <EntityType Name="UmbralComponente">
+          <Key>
+            <PropertyRef Name="Codigo" />
+            <PropertyRef Name="CodigoC" />
+            <PropertyRef Name="CodigoUmbral" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" />
+          <Property Name="CodigoC" Type="Int32" Nullable="false" />
+          <Property Name="CodigoUmbral" Type="Int32" Nullable="false" />
+          <Property Name="Porcentaje" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Componente" Relationship="Self.FK__UmbralCom__Codig__571DF1D5" FromRole="UmbralComponente" ToRole="Componente" />
+          <NavigationProperty Name="Servidor" Relationship="Self.FK__UmbralCom__Codig__5629CD9C" FromRole="UmbralComponente" ToRole="Servidor" />
+          <NavigationProperty Name="Umbral" Relationship="Self.FK__UmbralCom__Codig__5812160E" FromRole="UmbralComponente" ToRole="Umbral" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="Usuario" />
+          </Key>
+          <Property Name="Usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Correo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Contrasena" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="EncargadoServicio" Relationship="Self.FK__Encargado__Usuar__4E88ABD4" FromRole="Usuarios" ToRole="EncargadoServicio" />
+          <NavigationProperty Name="EncargadoServidor" Relationship="Self.FK__Encargado__Usuar__5070F446" FromRole="Usuarios" ToRole="EncargadoServidor" />
+        </EntityType>
+        <Association Name="FK__UmbralCom__Codig__571DF1D5">
+          <End Role="Componente" Type="Self.Componente" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Componente">
+              <PropertyRef Name="CodigoC" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="CodigoC" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Codig__4D94879B">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="EncargadoServicio" Type="Self.EncargadoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="EncargadoServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Usuar__4E88ABD4">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="EncargadoServicio" Type="Self.EncargadoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario" />
+            </Principal>
+            <Dependent Role="EncargadoServicio">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Codig__4F7CD00D">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="EncargadoServidor" Type="Self.EncargadoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="EncargadoServidor">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Encargado__Usuar__5070F446">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="EncargadoServidor" Type="Self.EncargadoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario" />
+            </Principal>
+            <Dependent Role="EncargadoServidor">
+              <PropertyRef Name="Usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Monitoreo__Codig__5165187F">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="MonitoreoServicio" Type="Self.MonitoreoServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="MonitoreoServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Monitoreo__Codig__52593CB8">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="MonitoreoServidor" Type="Self.MonitoreoServidor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="MonitoreoServidor">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Parametro__Codig__534D60F1">
+          <End Role="Parametro" Type="Self.Parametro" Multiplicity="1" />
+          <End Role="ParametroServicio" Type="Self.ParametroServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parametro">
+              <PropertyRef Name="CodigoP" />
+            </Principal>
+            <Dependent Role="ParametroServicio">
+              <PropertyRef Name="CodigoP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Parametro__Codig__5441852A">
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="1" />
+          <End Role="ParametroServicio" Type="Self.ParametroServicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Principal>
+            <Dependent Role="ParametroServicio">
+              <PropertyRef Name="CodigoServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Servicio__Codigo__5535A963">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="Servicio" Type="Self.Servicio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="Servicio">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UmbralCom__Codig__5629CD9C">
+          <End Role="Servidor" Type="Self.Servidor" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servidor">
+              <PropertyRef Name="Codigo" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="Codigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UmbralCom__Codig__5812160E">
+          <End Role="Umbral" Type="Self.Umbral" Multiplicity="1" />
+          <End Role="UmbralComponente" Type="Self.UmbralComponente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Umbral">
+              <PropertyRef Name="CodigoUmbral" />
+            </Principal>
+            <Dependent Role="UmbralComponente">
+              <PropertyRef Name="CodigoUmbral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MonitoreoEntities" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="Componente" EntityType="Self.Componente" />
+          <EntitySet Name="EncargadoServicio" EntityType="Self.EncargadoServicio" />
+          <EntitySet Name="EncargadoServidor" EntityType="Self.EncargadoServidor" />
+          <EntitySet Name="MonitoreoServicio" EntityType="Self.MonitoreoServicio" />
+          <EntitySet Name="MonitoreoServidor" EntityType="Self.MonitoreoServidor" />
+          <EntitySet Name="Parametro" EntityType="Self.Parametro" />
+          <EntitySet Name="ParametroServicio" EntityType="Self.ParametroServicio" />
+          <EntitySet Name="Servicio" EntityType="Self.Servicio" />
+          <EntitySet Name="Servidor" EntityType="Self.Servidor" />
+          <EntitySet Name="Umbral" EntityType="Self.Umbral" />
+          <EntitySet Name="UmbralComponente" EntityType="Self.UmbralComponente" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <AssociationSet Name="FK__UmbralCom__Codig__571DF1D5" Association="Self.FK__UmbralCom__Codig__571DF1D5">
+            <End Role="Componente" EntitySet="Componente" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Codig__4D94879B" Association="Self.FK__Encargado__Codig__4D94879B">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="EncargadoServicio" EntitySet="EncargadoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Usuar__4E88ABD4" Association="Self.FK__Encargado__Usuar__4E88ABD4">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="EncargadoServicio" EntitySet="EncargadoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Codig__4F7CD00D" Association="Self.FK__Encargado__Codig__4F7CD00D">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="EncargadoServidor" EntitySet="EncargadoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Encargado__Usuar__5070F446" Association="Self.FK__Encargado__Usuar__5070F446">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="EncargadoServidor" EntitySet="EncargadoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Monitoreo__Codig__5165187F" Association="Self.FK__Monitoreo__Codig__5165187F">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="MonitoreoServicio" EntitySet="MonitoreoServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Monitoreo__Codig__52593CB8" Association="Self.FK__Monitoreo__Codig__52593CB8">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="MonitoreoServidor" EntitySet="MonitoreoServidor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Parametro__Codig__534D60F1" Association="Self.FK__Parametro__Codig__534D60F1">
+            <End Role="Parametro" EntitySet="Parametro" />
+            <End Role="ParametroServicio" EntitySet="ParametroServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Parametro__Codig__5441852A" Association="Self.FK__Parametro__Codig__5441852A">
+            <End Role="Servicio" EntitySet="Servicio" />
+            <End Role="ParametroServicio" EntitySet="ParametroServicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Servicio__Codigo__5535A963" Association="Self.FK__Servicio__Codigo__5535A963">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="Servicio" EntitySet="Servicio" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UmbralCom__Codig__5629CD9C" Association="Self.FK__UmbralCom__Codig__5629CD9C">
+            <End Role="Servidor" EntitySet="Servidor" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UmbralCom__Codig__5812160E" Association="Self.FK__UmbralCom__Codig__5812160E">
+            <End Role="Umbral" EntitySet="Umbral" />
+            <End Role="UmbralComponente" EntitySet="UmbralComponente" />
+          </AssociationSet>
+          <FunctionImport Name="Dashboard" ReturnType="Collection(MonitoreoModel.Dashboard_Result)">
+          <Parameter Name="Servidor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InicioSesion" ReturnType="Collection(Int32)">
+            <Parameter Name="usuario" Mode="In" Type="String" />
+            <Parameter Name="contrasena" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Notificaciones">
+            <Parameter Name="tipo" Mode="In" Type="Int32" />
+            <Parameter Name="usuario" Mode="In" Type="String" />
+            <Parameter Name="codigo" Mode="In" Type="Int32" />
+            <Parameter Name="valor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ServicioServidor" ReturnType="Collection(MonitoreoModel.ServicioServidor_Result)">
+          <Parameter Name="servidor" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ServidorNombre" ReturnType="Collection(MonitoreoModel.ServidorNombre_Result)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Correos" ReturnType="Collection(String)">
+            <Parameter Name="valor" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Dashboard_Result">
+          <Property Type="Int32" Name="Codigo" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="Ultima_fecha" Nullable="false" />
+          <Property Type="String" Name="Estado" Nullable="false" MaxLength="11" />
+          <Property Type="Double" Name="Uso_de_CPU" Nullable="false" />
+          <Property Type="Double" Name="Uso_de_Memoria" Nullable="false" />
+          <Property Type="Double" Name="Uso_de_Disco" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ServicioServidor_Result">
+          <Property Type="Int32" Name="CodigoServicio" Nullable="false" />
+          <Property Type="Int32" Name="Codigo" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="255" />
+          <Property Type="Double" Name="Timeout" Nullable="false" />
+          <Property Type="String" Name="Tipo" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="ServidorNombre_Result">
+          <Property Type="Int32" Name="Codigo" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="UsuarioAdmin" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Contrasena" Nullable="false" MaxLength="255" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MonitoreoModelStoreContainer" CdmEntityContainer="MonitoreoEntities">
+          <EntitySetMapping Name="Componente">
+            <EntityTypeMapping TypeName="MonitoreoModel.Componente">
+              <MappingFragment StoreEntitySet="Componente">
+                <ScalarProperty Name="CodigoC" ColumnName="CodigoC" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EncargadoServicio">
+            <EntityTypeMapping TypeName="MonitoreoModel.EncargadoServicio">
+              <MappingFragment StoreEntitySet="EncargadoServicio">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="Notificaciones" ColumnName="Notificaciones" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EncargadoServidor">
+            <EntityTypeMapping TypeName="MonitoreoModel.EncargadoServidor">
+              <MappingFragment StoreEntitySet="EncargadoServidor">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Notificaciones" ColumnName="Notificaciones" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonitoreoServicio">
+            <EntityTypeMapping TypeName="MonitoreoModel.MonitoreoServicio">
+              <MappingFragment StoreEntitySet="MonitoreoServicio">
+                <ScalarProperty Name="MonitoreoID" ColumnName="MonitoreoID" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="Timeout" ColumnName="Timeout" />
+                <ScalarProperty Name="Disponibilidad" ColumnName="Disponibilidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonitoreoServidor">
+            <EntityTypeMapping TypeName="MonitoreoModel.MonitoreoServidor">
+              <MappingFragment StoreEntitySet="MonitoreoServidor">
+                <ScalarProperty Name="MonitoreoID" ColumnName="MonitoreoID" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CPU" ColumnName="CPU" />
+                <ScalarProperty Name="Memoria" ColumnName="Memoria" />
+                <ScalarProperty Name="Disco" ColumnName="Disco" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Parametro">
+            <EntityTypeMapping TypeName="MonitoreoModel.Parametro">
+              <MappingFragment StoreEntitySet="Parametro">
+                <ScalarProperty Name="CodigoP" ColumnName="CodigoP" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ParametroServicio">
+            <EntityTypeMapping TypeName="MonitoreoModel.ParametroServicio">
+              <MappingFragment StoreEntitySet="ParametroServicio">
+                <ScalarProperty Name="CodigoP" ColumnName="CodigoP" />
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicio">
+            <EntityTypeMapping TypeName="MonitoreoModel.Servicio">
+              <MappingFragment StoreEntitySet="Servicio">
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Timeout" ColumnName="Timeout" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servidor">
+            <EntityTypeMapping TypeName="MonitoreoModel.Servidor">
+              <MappingFragment StoreEntitySet="Servidor">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="UsuarioAdmin" ColumnName="UsuarioAdmin" />
+                <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Umbral">
+            <EntityTypeMapping TypeName="MonitoreoModel.Umbral">
+              <MappingFragment StoreEntitySet="Umbral">
+                <ScalarProperty Name="CodigoUmbral" ColumnName="CodigoUmbral" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UmbralComponente">
+            <EntityTypeMapping TypeName="MonitoreoModel.UmbralComponente">
+              <MappingFragment StoreEntitySet="UmbralComponente">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="CodigoC" ColumnName="CodigoC" />
+                <ScalarProperty Name="CodigoUmbral" ColumnName="CodigoUmbral" />
+                <ScalarProperty Name="Porcentaje" ColumnName="Porcentaje" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="MonitoreoModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Dashboard" FunctionName="MonitoreoModel.Store.Dashboard">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MonitoreoModel.Dashboard_Result">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Ultima_fecha" ColumnName="Ultima fecha" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Uso_de_CPU" ColumnName="Uso de CPU" />
+                <ScalarProperty Name="Uso_de_Memoria" ColumnName="Uso de Memoria" />
+                <ScalarProperty Name="Uso_de_Disco" ColumnName="Uso de Disco" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InicioSesion" FunctionName="MonitoreoModel.Store.InicioSesion" />
+          <FunctionImportMapping FunctionImportName="Notificaciones" FunctionName="MonitoreoModel.Store.Notificaciones" />
+          <FunctionImportMapping FunctionImportName="ServicioServidor" FunctionName="MonitoreoModel.Store.ServicioServidor">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MonitoreoModel.ServicioServidor_Result">
+                <ScalarProperty Name="CodigoServicio" ColumnName="CodigoServicio" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Timeout" ColumnName="Timeout" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ServidorNombre" FunctionName="MonitoreoModel.Store.ServidorNombre">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MonitoreoModel.ServidorNombre_Result">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="UsuarioAdmin" ColumnName="UsuarioAdmin" />
+                <ScalarProperty Name="Contrasena" ColumnName="Contrasena" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Correos" FunctionName="MonitoreoModel.Store.Correos" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
